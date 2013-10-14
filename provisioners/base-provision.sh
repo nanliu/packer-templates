@@ -1,7 +1,7 @@
 #!/bin/bash
 
-yum install -y make bzip2 openssh-clients nano htop wget automake gcc cpp glibc-devel glibc-headers \
-glibc-kernheaders glibc glibc-common libgcc zlib-devel openssl-devel readline-devel
+yum install -y make bzip2 openssh-clients htop wget automake gcc cpp glibc-devel glibc-headers \
+glibc-kernheaders glibc glibc-common libgcc zlib-devel openssl-devel readline-devel zsh vim
 
 #######################################################
 # Build Ruby
