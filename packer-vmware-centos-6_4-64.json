@@ -1,42 +1,49 @@
 {
   "builders": [
     {
-      "boot_command": [
-        "<esc>",
-        "<wait>linux ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/anaconda-ks.cfg<enter>"
-      ],
+      "vm_name": "centos64",
+      "type": "vmware",
       "boot_wait": "5s",
-      "disk_size": 20480,
-      "guest_os_type": "linux",
       "headless": true,
-      "http_directory": "./http_directory",
+      "guest_os_type": "centos-64",
+      "http_directory": "http",
+      "disk_size": 20480,
+      "iso_url": "http://mirrors.usinternet.com/centos/6.4/isos/x86_64/CentOS-6.4-x86_64-minimal.iso",
       "iso_checksum": "4a5fa01c81cc300f4729136e28ebe600",
       "iso_checksum_type": "md5",
-      "iso_url": "http://mirrors.usinternet.com/centos/6.4/isos/x86_64/CentOS-6.4-x86_64-minimal.iso",
-      "skip_compaction": true,
+      "ssh_username": "vagrant",
       "ssh_password": "vagrant",
-      "ssh_username": "root",
       "ssh_wait_timeout": "20m",
       "tools_upload_flavor": "linux",
-      "type": "vmware",
-      "vm_name": "packer-centos-6_4-64"
-    }
-  ],
-  "post-processors": [
-    {
-      "output": "centos-6_4-64_vmware.box",
-      "type": "vagrant"
+      "boot_command": [
+        "<tab> text ks=http://{{ .HTTPIP }}:{{ .HTTPPort }}/ks.cfg<enter>"
+      ],
+      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now"
     }
   ],
   "provisioners": [
     {
-      "script": "provisioners/install-vmware-guest-additions.sh",
-      "type": "shell"
-    },
+      "type": "shell",
+      "scripts": [
+        "provisioners/base.sh",
+        "provisioners/vagrant.sh",
+        "provisioners/vmtools.sh",
+        "provisioners/puppet.sh",
+        "provisioners/cleanup.sh",
+        "provisioners/zerodisk.sh"
+      ],
+      "override": {
+        "vmware": {
+          "execute_command": "echo 'vagrant'|{{.Vars}} sudo -E -S bash '{{.Path}}'"
+        }
+      }
+    }
+  ],
+  "post-processors": [
     {
-      "script": "provisioners/clean-empty-space.sh",
-      "type": "shell"
+      "type": "vagrant",
+      "keep_input_artifact": true,
+      "output": "./box/centos-6_4-64_vmware.box"
     }
   ]
 }
-
