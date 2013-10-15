@@ -36,3 +36,10 @@ q_install=y
 EOF
 
 ./puppet-enterprise-installer -a agent.ans
+
+# Remove certname so the system will use host FQDN
+sed -i '/certname =/d' /etc/puppetlabs/puppet/puppet.conf
+
+# Symlink so puppet is in vagrant provisioner PATH
+ln -s /opt/puppet/bin/facter/usr/bin/facter
+ln -s /opt/puppet/bin/puppet /usr/bin/puppet
