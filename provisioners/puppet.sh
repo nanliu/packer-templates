@@ -41,5 +41,5 @@ EOF
 sed -i '/certname =/d' /etc/puppetlabs/puppet/puppet.conf
 
 # Symlink so puppet is in vagrant provisioner PATH
-ln -s /opt/puppet/bin/facter/usr/bin/facter
+ln -s /opt/puppet/bin/facter /usr/bin/facter
 ln -s /opt/puppet/bin/puppet /usr/bin/puppet
